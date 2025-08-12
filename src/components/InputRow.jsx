@@ -16,12 +16,19 @@ const InputRow = ({
   };
 
   const handleAmountChange = (e) => {
-    const amount = Math.max(1, parseInt(e.target.value) || 1);
+    const value = e.target.value;
+    
+    if (value === '') {
+      onInputChange(index, 'amount', '');
+      return;
+    }
+    
+    const amount = Math.max(1, parseInt(value) || 1);
     onInputChange(index, 'amount', amount);
   };
 
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-4 items-center">
       <SmartCombobox
         value={input.item}
         onChange={handleItemChange}
@@ -30,14 +37,16 @@ const InputRow = ({
         placeholder="Select or type item name"
         className="flex-1"
       />
-      <input
-        type="number"
-        min="1"
-        value={input.amount}
-        onChange={handleAmountChange}
-        className="w-20 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Amt"
-      />
+      <div>
+        <input
+          type="number"
+          min="1"
+          value={input.amount}
+          onChange={handleAmountChange}
+          className="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Amount"
+        />
+      </div>
       {showRemove && (
         <button
           onClick={() => onRemove(index)}

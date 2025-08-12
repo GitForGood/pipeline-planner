@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Trash2 } from "lucide-react";
 
 const ListViewComponent = ({ data, title = "Items" }) => {
     const [inputValue, setInputValue] = useState('');
@@ -32,12 +33,11 @@ const ListViewComponent = ({ data, title = "Items" }) => {
     };
 
     return (
-        <div className="border p-4 rounded">
+        <div className="border p-4 rounded bg-white">
             <h2>{title} ({data.count})</h2>
             
             {/* Add new item */}
             <div className="mb-4">
-                <label htmlFor={title}> Add {title} that you want to use</label>
                 <input 
                     id={title}
                     type="text" 
@@ -45,7 +45,7 @@ const ListViewComponent = ({ data, title = "Items" }) => {
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyPress}
                     placeholder={`Add new ${title.toLowerCase().slice(0, -1)}...`}
-                    className="border p-2 mr-2"
+                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button onClick={handleAdd} className="bg-blue-500 text-white p-2 rounded">
                     Add
@@ -71,7 +71,7 @@ const ListViewComponent = ({ data, title = "Items" }) => {
                                     onClick={() => handleRemove(item)}
                                     className="bg-red-500 text-white px-2 py-1 rounded text-sm"
                                 >
-                                    Remove
+                                    <Trash2 size={16}/>
                                 </button>
                             </li>
                         ))}

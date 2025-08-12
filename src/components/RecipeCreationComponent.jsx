@@ -66,7 +66,7 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
       // Auto-expand: if user is typing in the last row and it's not empty, add a new row
       const isLastRow = index === prev.input.length - 1;
       const currentRow = newInput[index];
-      const hasContent = currentRow.item || currentRow.amount > 1;
+      const hasContent = currentRow.item;
       const canAddMore = newInput.length < 9;
 
       if (isLastRow && hasContent && canAddMore) {
@@ -156,8 +156,8 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
           <Package size={16} />
           Output
         </h4>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
+        <div className="flex gap-4">
+          <div className='flex-1'>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Item Name *
             </label>
@@ -172,7 +172,7 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
               <p className="text-red-600 text-sm mt-1">{errors.outputItem}</p>
             )}
           </div>
-          <div>
+          <div className='w-32'>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Amount *
             </label>
@@ -180,7 +180,16 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
               type="number"
               min="1"
               value={formData.output.amount}
-              onChange={(e) => updateOutput('amount', Math.max(1, parseInt(e.target.value) || 1))}
+              onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === '') {
+                    updateOutput('amount', '');
+                    return;
+                  }
+                  const amount = Math.max(1, parseInt(value) || 1);
+                  updateOutput('amount', e.target.value)
+                }
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -193,8 +202,8 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
           <MapPin size={16} />
           Process
         </h4>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
+        <div className="flex gap-4">
+          <div className='flex-1'>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Address *
             </label>
@@ -209,7 +218,7 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
               <p className="text-red-600 text-sm mt-1">{errors.address}</p>
             )}
           </div>
-          <div>
+          <div className='w-32'>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <Clock size={16} className="inline mr-1" />
               Cycles *
@@ -218,7 +227,22 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
               type="number"
               min="1"
               value={formData.cycles}
-              onChange={(e) => setFormData(prev => ({ ...prev, cycles: Math.max(1, parseInt(e.target.value) || 1) }))}
+              onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === '') {
+                    setFormData(prev => ({
+                      ...prev,
+                      cycles: ''
+                    }));
+                    return;
+                  }
+                  const amount = Math.max(1, parseInt(value) || 1);
+                  setFormData(prev => ({
+                      ...prev,
+                      cycles: amount
+                    }));
+                }
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.cycles && (
@@ -227,20 +251,8 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
           </div>
         </div>
       </div>
-
-      {/* Recipe Name */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Recipe Name (auto-generated)
-        </label>
-        <input
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Recipe name will auto-generate"
-        />
-      </div>
+      
+      
 
       {/* Input Section */}
       <div className="mb-6">
@@ -267,20 +279,20 @@ const RecipeCreationComponent = ({ recipeManager, className = "" }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleConfirm}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-        >
-          <Save size={16} />
-          Confirm Recipe
-        </button>
+      <div className="flex justify-between">
         <button
           onClick={handleReset}
           className="px-4 py-3 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors flex items-center gap-2"
         >
           <RotateCcw size={16} />
           Reset
+        </button>
+        <button
+          onClick={handleConfirm}
+          className=" flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+        >
+          <Save size={16} />
+          Confirm Recipe
         </button>
       </div>
 
