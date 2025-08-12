@@ -1,23 +1,16 @@
-/* App.jsx */
-
-import Footer from './components/Footer'
-import Header from './components/Header'
-import ContactSection from './components/ContactSection'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { LandingPage } from '@pages'
+import { ToolPage } from '@pages'
 
 function App() {
   return (
-    <>
-      <Header/>
-      <main className='clipboard'>
-        <div className='paper'>
-          <h1>TESTING</h1>
-          <ContactSection/>
-        </div>
-      </main>
-      <Footer/>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/tool" element={<ToolPage />} />
+      </Routes>
+    </Router>
   )
 }
 
-export default App;
+export default App
